@@ -2,7 +2,7 @@
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace Sales.Mobiles;
+namespace Sales.Mobile;
 
 class Program : MauiApplication
 {

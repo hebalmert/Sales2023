@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace Sales.Mobiles;
+namespace Sales.Mobile;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

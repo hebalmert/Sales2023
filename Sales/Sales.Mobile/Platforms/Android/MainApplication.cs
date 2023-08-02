@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace Sales.Mobiles;
+namespace Sales.Mobile;
 
 [Application]
 public class MainApplication : MauiApplication

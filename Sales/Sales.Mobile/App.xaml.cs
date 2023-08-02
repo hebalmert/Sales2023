@@ -1,4 +1,4 @@
-﻿namespace Sales.Mobiles;
+﻿namespace Sales.Mobile;
 
 public partial class App : Application
 {

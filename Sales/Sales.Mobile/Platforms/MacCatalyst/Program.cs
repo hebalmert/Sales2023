@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace Sales.Mobiles;
+namespace Sales.Mobile;
 
 public class Program
 {
