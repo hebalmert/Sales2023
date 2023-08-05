@@ -22,7 +22,7 @@
                 HorizontalOptions="Center" />
 
             <Label
-                Text="Bienvenidos Nexxplanet"
+                Text="Bienvenidos Nexxplanet S.A.S"
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Bienvenidos al sistema de prueba"
                 FontSize="18"
