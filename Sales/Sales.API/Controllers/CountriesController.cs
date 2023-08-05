@@ -33,7 +33,7 @@ namespace Sales.API.Controllers
         }
 
         // GET: api/Countries/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<Country>> GetCountry(int id)
         {
           if (_context.Countries == null)
@@ -47,19 +47,14 @@ namespace Sales.API.Controllers
                 return NotFound();
             }
 
-            return country;
+            return Ok(country);
         }
 
         // PUT: api/Countries/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCountry(int id, Country country)
+        [HttpPut]
+        public async Task<IActionResult> PutCountry(Country country)
         {
-            if (id != country.Id)
-            {
-                return BadRequest();
-            }
-
             _context.Entry(country).State = EntityState.Modified;
 
             try
@@ -68,7 +63,7 @@ namespace Sales.API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CountryExists(id))
+                if (!CountryExists(country.Id))
                 {
                     return NotFound();
                 }
@@ -112,7 +107,7 @@ namespace Sales.API.Controllers
         }
 
         // DELETE: api/Countries/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteCountry(int id)
         {
             if (_context.Countries == null)

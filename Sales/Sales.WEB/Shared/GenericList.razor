@@ -1,0 +1,51 @@
+﻿@typeparam Titem
+
+@if (MyList is null)
+{
+    @if (Loading is null)
+    {
+        <div class="align-items-center">
+            <img src="https://miro.medium.com/v2/resize:fit:1400/1*CsJ05WEGfunYMLGfsT2sXA.gif" />
+        </div>
+    }
+    else
+    {
+        @Loading
+    }
+}
+else if (MyList.Count == 0)
+{
+    @if (NoRecord is null)
+    {
+        <div class="align-items-center">
+            <p>No Hay Registros para Mostrar</p>
+        </div>
+    }
+    else
+    {
+        @NoRecord
+    }
+}
+else
+{
+    @Body
+}
+
+
+@code {
+
+    [Parameter]
+    public RenderFragment? Loading { get; set; }
+
+    [Parameter]
+    public RenderFragment? NoRecord { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment Body { get; set; } = null!;
+
+    [Parameter]
+    [EditorRequired]
+    public List<Titem> MyList { get; set; } = null!;
+}
+
