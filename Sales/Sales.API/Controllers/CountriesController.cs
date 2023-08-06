@@ -55,25 +55,26 @@ namespace Sales.API.Controllers
         [HttpPut]
         public async Task<IActionResult> PutCountry(Country country)
         {
-            _context.Entry(country).State = EntityState.Modified;
-
             try
             {
+
+                _context.Countries.Update(country);
                 await _context.SaveChangesAsync();
+                return Ok(country);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateException dbUpdateException)
             {
-                if (!CountryExists(country.Id))
+                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
                 {
-                    return NotFound();
+                    return BadRequest("Ya Existe un pais con el mismo Nombre");
                 }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(dbUpdateException);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
-            return NoContent();
         }
 
         // POST: api/Countries
@@ -96,14 +97,29 @@ namespace Sales.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Country>> PostCountry(Country country)
         {
-            if (_context.Countries == null)
+            try
             {
-                return Problem("Entity set 'DataContext.Countries'  is null.");
-            }
-            _context.Countries.Add(country);
-            await _context.SaveChangesAsync();
+                if (_context.Countries == null)
+                {
+                    return Problem("Entity set 'DataContext.Countries'  is null.");
+                }
+                _context.Countries.Add(country);
+                await _context.SaveChangesAsync();
 
-            return Ok(country);
+                return Ok(country);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                {
+                    return BadRequest("Ya Existe un pais con el mismo Nombre");
+                }
+                return BadRequest(dbUpdateException);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE: api/Countries/5
