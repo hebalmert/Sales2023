@@ -29,7 +29,7 @@ namespace Sales.API.Controllers
           {
               return NotFound();
           }
-            return await _context.Countries.ToListAsync();
+            return await _context.Countries.Include(x => x.States).ToListAsync();
         }
 
         // GET: api/Countries/5
@@ -40,7 +40,30 @@ namespace Sales.API.Controllers
           {
               return NotFound();
           }
-            var country = await _context.Countries.FindAsync(id);
+            var country = await _context.Countries
+                .Include(x => x.States)
+                .FirstOrDefaultAsync(x=> x.Id == id);
+
+            if (country == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(country);
+        }
+
+        // GET: api/Countries/5
+        [HttpGet("full")]
+        public async Task<ActionResult<Country>> GetFull()
+        {
+            if (_context.Countries == null)
+            {
+                return NotFound();
+            }
+            var country = await _context.Countries
+                .Include(x => x.States!)
+                .ThenInclude(x=> x.Cities)
+                .ToListAsync();
 
             if (country == null)
             {

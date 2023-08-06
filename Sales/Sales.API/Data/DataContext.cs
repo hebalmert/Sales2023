@@ -9,10 +9,11 @@ namespace Sales.API.Data
         public DataContext(DbContextOptions options) : base(options)
         {
         }
+        public DbSet<City> Cities => Set<City>();
 
         public DbSet<Country> Countries => Set<Country>();
 
-
+        public DbSet<State> States => Set<State>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,6 +23,11 @@ namespace Sales.API.Data
             //Modelo de Countries
             modelBuilder.Entity<Country>().HasIndex(x=> x.Name).IsUnique();
 
+            //Modelo de Estado
+            modelBuilder.Entity<State>().HasIndex("Name", "CountryId").IsUnique();
+
+            //Modelo de Ciudad
+            modelBuilder.Entity<City>().HasIndex("Name", "StateId").IsUnique();
 
 
 
