@@ -10,7 +10,7 @@ using Sales.Shared.Entities;
 
 namespace Sales.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/countries")]
     [ApiController]
     public class CountriesController : ControllerBase
     {
@@ -41,14 +41,15 @@ namespace Sales.API.Controllers
               return NotFound();
           }
             var country = await _context.Countries
-                .Include(x => x.States)
+                .Include(x => x.States!)
+                .ThenInclude(x=> x.Cities)
                 .FirstOrDefaultAsync(x=> x.Id == id);
 
             if (country == null)
             {
                 return NotFound();
             }
-
+             
             return Ok(country);
         }
 
@@ -102,21 +103,6 @@ namespace Sales.API.Controllers
 
         // POST: api/Countries
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Country>> PostCountry(Country country)
-        //{
-        //  if (_context.Countries == null)
-        //  {
-        //      return Problem("Entity set 'DataContext.Countries'  is null.");
-        //  }
-        //    _context.Countries.Add(country);
-        //    await _context.SaveChangesAsync();
-        //
-        //    return CreatedAtAction("GetCountry", new { id = country.Id }, country);
-        //}
-
-        // POST: api/Countries
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Country>> PostCountry(Country country)
         {
@@ -124,7 +110,7 @@ namespace Sales.API.Controllers
             {
                 if (_context.Countries == null)
                 {
-                    return Problem("Entity set 'DataContext.Countries'  is null.");
+                    return BadRequest("ENo Existen Registros en Estado");
                 }
                 _context.Countries.Add(country);
                 await _context.SaveChangesAsync();
@@ -163,11 +149,6 @@ namespace Sales.API.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool CountryExists(int id)
-        {
-            return (_context.Countries?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

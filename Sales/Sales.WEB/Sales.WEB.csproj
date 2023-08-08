@@ -21,10 +21,14 @@
   <ItemGroup>
     <None Remove="Repositories\" />
     <None Remove="Pages\Countries\" />
+    <None Remove="Pages\States\" />
+    <None Remove="Pages\Cities\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Repositories\" />
     <Folder Include="Pages\Countries\" />
+    <Folder Include="Pages\States\" />
+    <Folder Include="Pages\Cities\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sales.Shared\Sales.Shared.csproj">
