@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sales.API.Data;
+using Sales.API.Helpers;
+using Sales.Shared.DTOs;
 using Sales.Shared.Entities;
 
 namespace Sales.API.Controllers
@@ -21,16 +23,32 @@ namespace Sales.API.Controllers
             _context = context;
         }
 
-        // GET: api/States
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<State>>> GetStates()
+        public async Task<ActionResult> Get([FromQuery] PaginationDTO pagination)
         {
-            if (_context.States == null)
-            {
-                return NotFound();
-            }
-            return await _context.States.Include(x => x.Cities).ToListAsync();
+            var queryable = _context.States
+                .Include(x => x.Cities)
+                .Where(x => x.Country!.Id == pagination.Id)
+                .AsQueryable();
+
+            return Ok(await queryable
+                .OrderBy(x => x.Name)
+                .Paginate(pagination)
+                .ToListAsync());
         }
+
+        [HttpGet("totalPages")]
+        public async Task<ActionResult> GetPages([FromQuery] PaginationDTO pagination)
+        {
+            var queryable = _context.States
+                .Where(x => x.Country!.Id == pagination.Id)
+                .AsQueryable();
+
+            double count = await queryable.CountAsync();
+            double totalPages = Math.Ceiling(count / pagination.RecordsNumber);
+            return Ok(totalPages);
+        }
+
 
         // GET: api/States/5
         [HttpGet("{id:int}")]

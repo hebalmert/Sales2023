@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Sales.API.Data;
-
-
+using Sales.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +21,7 @@ builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name=DefaultConn
 
 //Agregamos la injeccion del SEEDDB
 builder.Services.AddTransient<SeedDb>();
+builder.Services.AddScoped<IApiService, ApiService>();
 
 var app = builder.Build();
 //Complemento de la Injection SeedDb 

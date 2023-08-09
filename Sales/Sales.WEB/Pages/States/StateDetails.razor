@@ -41,11 +41,19 @@ else
             </table>
         </Body>
     </GenericList>
+
+    <Pagination CurrentPage="currentPage"
+                TotalPages="totalPages"
+                SelectedPage="SelectedPage" />
+
 }
 
 @code {
     private State? State;
     private List<City>? Cities;
+    private int currentPage = 1;
+    private int totalPages;
+
 
     [Parameter]
     public int StateId { get; set; }
@@ -55,24 +63,24 @@ else
         await LoadAsync();
     }
 
-    private async Task LoadAsync()
+    private async Task SelectedPage(int page)
     {
-        var responseHttp = await _repository.Get<State>($"/api/states/{StateId}");
-        if (responseHttp.Error)
-        {
-            if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
-            {
-                _navigation.NavigateTo("/countries");
-                return;
-            }
+        currentPage = page;
+        await LoadAsync(page);
+    }
 
-            var message = await responseHttp.GetErrorMessageAsync();
-            await _sweetAlert.FireAsync("Error", message, SweetAlertIcon.Error);
-            return;
-        }
 
-        State = responseHttp.Response;
-        Cities = State!.Cities!.ToList();
+    private async Task LoadAsync(int page = 1)
+    {
+        string url1 = $"api/cities?id={StateId}&page={page}";
+        string url2 = $"api/cities/totalPages?id={StateId}";
+        var responseHppt = await _repository.Get<State>($"api/states/{StateId}");
+        var responseHppt2 = await _repository.Get<List<City>>(url1);
+        var responseHppt3 = await _repository.Get<int>(url2);
+        State = responseHppt.Response;
+        Cities = responseHppt2.Response;
+        totalPages = responseHppt3.Response;
+
     }
 
     private async Task DeleteAsync(int cityId)

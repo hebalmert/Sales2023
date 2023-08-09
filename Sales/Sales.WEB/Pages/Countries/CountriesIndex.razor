@@ -40,20 +40,38 @@
     </Body>
 </GenericList>
 
+<Pagination CurrentPage="currentPage"
+            TotalPages="totalPages"
+            SelectedPage="SelectedPage" />
 
 @code {
-    public List<Country>? Countries { get; set; }
 
+    private int currentPage = 1;
+    private int totalPages;
+
+    public List<Country>? Countries { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         await LoadAsync();
     }
 
-    private async Task LoadAsync()
+    private async Task SelectedPage(int page)
     {
-        var responseHttp = await _repository.Get<List<Country>>("/api/countries");
-        Countries = responseHttp.Response;
+        currentPage = page;
+        await LoadAsync(page);
+    }
+
+    private async Task LoadAsync(int page = 1)
+    {
+        string url1 = $"api/countries?page={page}";
+        string url2 = $"api/countries/totalPages";
+
+        var responseHppt = await _repository.Get<List<Country>>(url1);
+        var responseHppt2 = await _repository.Get<int>(url2);
+        Countries = responseHppt.Response!;
+        totalPages = responseHppt2.Response!;
+
     }
 
     private async Task DeleteAsync(int id)
