@@ -9,6 +9,7 @@ namespace Sales.Shared.DTOs
 
         public int RecordsNumber { get; set; } = 20;
 
+        public string? Filter { get; set; }
     }
 }
 

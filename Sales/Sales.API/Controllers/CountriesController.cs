@@ -30,6 +30,13 @@ namespace Sales.API.Controllers
                 .Include(x => x.States)
                 .AsQueryable();
 
+            //Para agregar FIltros o Busquedas
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
+            }
+
+
             return Ok(await queryable
                 .OrderBy(x => x.Name)
                 .Paginate(pagination)
@@ -40,6 +47,13 @@ namespace Sales.API.Controllers
         public async Task<ActionResult> GetPages([FromQuery] PaginationDTO pagination)
         {
             var queryable = _context.Countries.AsQueryable();
+
+            //Para Agregar Filtros o Busquedas
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
+            }
+
             double count = await queryable.CountAsync();
             double totalPages = Math.Ceiling(count / pagination.RecordsNumber);
             return Ok(totalPages);
