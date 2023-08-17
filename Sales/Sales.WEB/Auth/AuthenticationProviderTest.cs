@@ -13,7 +13,7 @@ namespace Sales.WEB.Auth
             await Task.Delay(3000);
 
             var anonimous = new ClaimsIdentity();
-            var zuluUser = new ClaimsIdentity(new List<Claim>
+            var HebertUser = new ClaimsIdentity(new List<Claim>
         {
             new Claim("FirstName", "Hebert"),
             new Claim("LastName", "Merchan"),
@@ -23,7 +23,7 @@ namespace Sales.WEB.Auth
         },
                 authenticationType: "test");
 
-            return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(zuluUser)));
+            return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(HebertUser)));
         }
     }
 
