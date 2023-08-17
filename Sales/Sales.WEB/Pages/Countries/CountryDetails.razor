@@ -2,6 +2,7 @@
 @inject IRepository _repository
 @inject NavigationManager _navigation
 @inject SweetAlertService _sweetAlert
+@attribute [Authorize(Roles = "Admin")]
 
 @if (Country is null)
 {

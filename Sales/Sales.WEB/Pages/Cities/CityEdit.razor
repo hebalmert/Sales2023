@@ -2,6 +2,7 @@
 @inject IRepository _repository
 @inject NavigationManager _navigation
 @inject SweetAlertService _sweetAlert
+@attribute [Authorize(Roles = "Admin")]
 
 <h3>Editar Ciudad</h3>
 

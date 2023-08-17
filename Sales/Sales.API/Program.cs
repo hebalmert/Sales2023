@@ -1,9 +1,12 @@
 ﻿using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Sales.API.Data;
+using Sales.API.Helpers;
 using Sales.API.Services;
+using Sales.Shared.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +25,24 @@ builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name=DefaultConn
 //Agregamos la injeccion del SEEDDB
 builder.Services.AddTransient<SeedDb>();
 builder.Services.AddScoped<IApiService, ApiService>();
+
+
+//SAistema de Validacion de Usuarios
+builder.Services.AddIdentity<User, IdentityRole>(x =>
+{
+    x.User.RequireUniqueEmail = true;
+    x.Password.RequireDigit = false;
+    x.Password.RequiredUniqueChars = 0;
+    x.Password.RequireLowercase = false;
+    x.Password.RequireNonAlphanumeric = false;
+    x.Password.RequireUppercase = false;
+})
+    .AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders();
+
+
+builder.Services.AddScoped<IUserHelper, UserHelper>();
+
 
 var app = builder.Build();
 //Complemento de la Injection SeedDb 
@@ -46,6 +67,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+//Para Validacion de Usuarios
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -2,10 +2,11 @@
 @inject IRepository _repository
 @inject NavigationManager _navigation
 @inject SweetAlertService _sweetAlert
+@attribute [Authorize(Roles = "Admin")]
 
 <h3>Crear Pais</h3>
 
-<CountryForm @ref="countryForm" Country="Country" OnValidSubmit="Create" ReturnAction="Return"/>
+<CountryForm @ref="countryForm" Country="Country" OnValidSubmit="Create" ReturnAction="Return" />
 
 @code {
     private Country Country = new();
