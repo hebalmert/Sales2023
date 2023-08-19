@@ -23,7 +23,6 @@ builder.Services.AddControllers()
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 //Para que Swagger pueda Manejar Token
 builder.Services.AddSwaggerGen(c =>
