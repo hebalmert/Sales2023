@@ -15,7 +15,15 @@ builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri("http
 
 //Para Mantener el sistema de Validacion de Usuarios
 builder.Services.AddAuthorizationCore();
-builder.Services.AddScoped<AuthenticationStateProvider, AuthenticationProviderTest>();
+
+//era solo para hacer prueas de usuario Manual
+//builder.Services.AddScoped<AuthenticationStateProvider, AuthenticationProviderTest>();
+
+
+//Sistema usar el Proveedor de Autenticacion
+builder.Services.AddScoped<AuthenticationProviderJWT>();
+builder.Services.AddScoped<AuthenticationStateProvider, AuthenticationProviderJWT>(x => x.GetRequiredService<AuthenticationProviderJWT>());
+builder.Services.AddScoped<ILoginService, AuthenticationProviderJWT>(x => x.GetRequiredService<AuthenticationProviderJWT>());
 
 
 //Injectamos la Interfaz y su Clase
